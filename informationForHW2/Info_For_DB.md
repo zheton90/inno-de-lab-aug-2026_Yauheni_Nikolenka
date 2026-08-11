@@ -17,22 +17,20 @@ Part2:
 ■ LastName: VARCHAR(30), NOT NULL 
 
 ○ Constraints: 
-■ PK_ Clients: PRIMARY KEY (ClientID) 
-■ UQ_AuthorFullName: UNIQUE (FirstName, LastName) 
+■ PK_Clients: PRIMARY KEY (ClientID) 
+■ UQ_ClientFullName: UNIQUE (FirstName, LastName) 
 
-2.	Table Name: Coachs
+2.	Table Name: Coaches
 ○ Description: Хранит информацию о тренерах
 
 ○ Attributes: 
 ■ CoachID: INTEGER, PK, NOT NULL, UNIQUE 
 ■ FirstName: VARCHAR(30), NOT NULL 
 ■ LastName: VARCHAR(30), NOT NULL 
-■ Traning Experience: INTEGER
-■ Group Classes Offered: ARRAY, NOT NULL 
-
+■ TrainingExperience: INTEGER
 
 ○ Constraints: 
-■ PK_ Coachs: PRIMARY KEY (CoachID) 
+■ PK_Coaches: PRIMARY KEY (CoachID) 
 ■ UQ_CoachFullName: UNIQUE (FirstName, LastName) 
 
 3.	Table Name: GroupClasses
@@ -41,54 +39,74 @@ Part2:
 ○ Attributes: 
 ■ GroupClassID: INTEGER, PK, NOT NULL, UNIQUE 
 ■ ClassName: VARCHAR(30), NOT NULL 
-■ Class Coach: ARRAY, NOT NULL 
-
 
 ○ Constraints: 
-■ PK_ Class: PRIMARY KEY (ClassID) 
+■ PK_Class: PRIMARY KEY (GroupClassID) 
 ■ UQ_ClassName: UNIQUE (ClassName) 
 
-4.	Table Name: TraningSlots
+
+
+4.	Table Name: TrainingSlots
 ○ Description: Таблица для реализации связи многие-ко-многим. Записывает информацию о какой тренер и когда ведёт групповое занятие.
 
 ○ Attributes: 
 ■ SlotID: INTEGER, PK, NOT NULL, UNIQUE 
-■ GroupID:  INTEGER, FK (REFERENCES GroupClasses), NOT NULL 
-■ CoachID: INTEGER, FK (REFERENCES Coachs), NOT NULL 
-■ Date :  TIMESTAMP, NOT NULL
+■ GroupClassID:  INTEGER, FK (REFERENCES GroupClasses), NOT NULL 
+■ CoachID: INTEGER, FK (REFERENCES Coaches), NOT NULL 
+■ Date:  TIMESTAMP, NOT NULL
 
 ○ Constraints: 
-■ PK_ TraningSlots: PRIMARY KEY (SlotID) 
-■ FK_ TraningSlots _ GroupClasses: FOREIGN KEY (GroupClassID) REFERENCES GroupClasses(GroupClassID) 
-■ FK_ TraningSlots _ Coachs: FOREIGN KEY (CoachsID) REFERENCES Coachs(CoachsID) 
-■ CHK_Dates: CHECK (Date IS NULL OR Date >= CurrentDate) 
+■ PK_TrainingSlots: PRIMARY KEY (SlotID) 
+■ FK_TrainingSlots_GroupClasses: FOREIGN KEY (GroupClassID) REFERENCES GroupClasses(GroupClassID) 
+■ FK_TrainingSlots_Coaches: FOREIGN KEY (CoachID) REFERENCES Coaches(CoachID) 
+■ CHK_Dates: CHECK (Date IS NOT NULL OR Date >= CURRENT_DATE) 
 
-5.	Table Name: SingUpForTraning
+5.	Table Name: SignUpForTraining
 ○ Description: Таблица для реализации связи многие-ко-многим. Записывает информацию о бронировании слотов для тренировок клиентами.
 
 ○ Attributes: 
-■ TreningID: INTEGER, PK, NOT NULL, UNIQUE 
-■ SlotID:  INTEGER, FK (REFERENCES GroupClasses), NOT NULL 
-■ ClientD: INTEGER, FK (REFERENCES Coachs), NOT NULL 
-■ NumberOfParticipants :  INTEGER, NOT NULL
+■ TrainingID: INTEGER, PK, NOT NULL, UNIQUE 
+■ SlotID:  INTEGER, FK (REFERENCES TrainingSlots), NOT NULL 
+■ ClientID: INTEGER, FK (REFERENCES Clients), NOT NULL 
+■ NumberOfParticipants:  INTEGER, NOT NULL
 
 ○ Constraints: 
-■ PK_ SingUpForTraning: PRIMARY KEY (TreningID) 
-■ FK_ SingUpForTraning _ Clients: FOREIGN KEY (ClientID) REFERENCES Clients(ClientID) 
-■ FK_ SingUpForTraning _ TraningSlots: FOREIGN KEY (SlotID) REFERENCES TraningSlots(SlotID) 
-■ CHK_Participant: CHECK (Participant IS NOT NULL AND Participant >= 4 AND Participant <= 15  ) 
+■ PK_SignUpForTraining: PRIMARY KEY (TrainingID) 
+■ FK_SignUpForTraining_Clients: FOREIGN KEY (ClientID) REFERENCES Clients(ClientID) 
+■ FK_SignUpForTraining_TrainingSlots: FOREIGN KEY (SlotID) REFERENCES TrainingSlots(SlotID) 
+■ CHK_Participant: CHECK (NumberOfParticipants IS NOT NULL AND NumberOfParticipants >= 4 AND NumberOfParticipants <= 15  ) 
+
+6.	Table Name: CoachesClasses
+○ Description: Таблица для реализации связей многие-ко-многим. Хранит информацию о том какой тренер какие занятия может вести.
+
+○ Attributes: 
+■ CoachID: INTEGER, FK, NOT NULL 
+■ GroupClassID: INTEGER, FK, NOT NULL
+
+○ Constraints: 
+■ PK_CoachesClasses: PRIMARY KEY (CoachID, GroupClassID) 
+■ FK_CoachesClasses_Coach: FOREIGN KEY (CoachID) REFERENCES Coaches(CoachID)
+■ FK_CoachesClasses_GroupClasses: FOREIGN KEY (GroupClassID) REFERENCES GroupClasses(GroupClassID)
+
+
+
 
 Взаимосвязи:
-● TraningSlot и GroupClass (Один-ко-Многим): Одна групповая тренировка может проводиться несколько раз, но в определённое время может пройти только одна групповая тренировка.
-○ TraningSlot.GroupID является внешним ключом, ссылающимся на GroupClass.ClassID. 
+● TrainingSlots и GroupClasses (Один-ко-Многим): Одна групповая тренировка может проводиться несколько раз, но в определённое время может пройти только одна групповая тренировка.
+○ TrainingSlots.GroupClassID является внешним ключом, ссылающимся на GroupClasses.GroupClassID. 
 
-	
+● TrainingSlots и Coaches (Один-ко-Многим): Один тренер может проводить несколько групповых занятий, но в определённое время может пройти только одна групповая тренировка.
+○ TrainingSlots.CoachID является внешним ключом, ссылающимся на Coaches.CoachID. 
 
-● TraningSlot и Coach (Один-ко-Многим): Один тренер может проводить несколько групповых занятий, но в определённое время может пройти только одна групповая тренировка.
-○ TraningSlot.СoachID является внешним ключом, ссылающимся на Coach.CoachID. 
+● SignUpForTraining и Clients (Один-ко-Многим): Один клиент может записаться на несколько групповых занятий, но в определённое время может записаться только одну групповую тренировку.
+○ SignUpForTraining.ClientID является внешним ключом, ссылающимся на Clients.ClientID. 
 
-● SingUpRorTraning и Client (Один-ко-Многим): Один клиент может записаться на  несколько групповых занятий, но в определённое время может записаться только одну групповую тренировку.
-○ SingUpRorTraning.СlientID является внешним ключом, ссылающимся на Client.ClientID. 
+● SignUpForTraining и TrainingSlots (Один-ко-Многим): Имеется много тренинг слотов, но в определённое время проходит только одна групповая тренировка.
+○ SignUpForTraining.SlotID является внешним ключом, ссылающимся на TrainingSlots.SlotID. 
 
-● SingUpRorTraning и TraningSlot (Один-ко-Многим): Имеется много тренинг слотов, но в определённое время проходит только одна групповая тренировка.
-○ SingUpRorTraning.SlotID является внешним ключом, ссылающимся на TraningSlot.SlotID. 
+● Coaches и CoachesClasses (Один-ко-Многим): В таблице CoachClasses может быть несколько одинаковых CoachID но все она ссылаются на одного тренера из таблицы Coaches.
+○ CoachesClasses.CoachID является внешним ключом, ссылающимся на Coaches.CoachID
+
+● GroupClasses и CoachesClasses (Один-ко-Многим): В таблице CoachClasses может быть несколько одинаковых GroupClassID но все она ссылаются на одно занятие в таблице GroupClasses.
+○ CoachesClasses.GroupClassID является внешним ключом, ссылающимся на GroupClasses.GroupClassID
+
