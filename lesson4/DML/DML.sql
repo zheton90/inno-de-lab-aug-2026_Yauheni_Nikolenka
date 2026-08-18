@@ -25,13 +25,15 @@ UPDATE
 SET
 	salary = 65000
 WHERE
-	employeeid = 1
+	firstname = 'Alice'
+    AND lastname = 'Smith'
 
 -- DELETE
 
 DELETE FROM employees
 WHERE
-	employeeid = 5
+	firstname = 'Eve'
+    AND lastname = 'Davis'
 
 -- SELECT
 
