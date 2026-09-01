@@ -1,3 +1,5 @@
+import json
+
 system_telemetry = [
     ("srv_01", 12.5, 64, "online"),
     ("srv_02", 85.0, 92, "online"),
@@ -26,15 +28,28 @@ sum_online_system_telemetry = len(online_system_telemetry)
 middle_cpu_load = round(float(sum(cpu_load) / sum_online_system_telemetry ), 2)
 max_ram_usage = max(ram_usage)
 
+final_report = {
+    'active_nodes_count': sum_online_system_telemetry,
+    'metrics': {
+        'average_cpu': middle_cpu_load,
+        'max_ram': max_ram_usage
+        }
+}
+
 # Вывел результат на экран как показано в примере.
 print(f"""
 Активные узлы в сети: {name_online_system_telemetry}
 Итоговый отчет телеметрии:
-{{
-'active_nodes_count': {sum_online_system_telemetry},
-'metrics': {{
-    'average_cpu': {middle_cpu_load},
-    'max_ram': {max_ram_usage}
-    }}
-}}
+{json.dumps(final_report, indent=4)}
 """)
+# print(f"""
+# Активные узлы в сети: {name_online_system_telemetry}
+# Итоговый отчет телеметрии:
+# {{
+# 'active_nodes_count': {sum_online_system_telemetry},
+# 'metrics': {{
+#     'average_cpu': {middle_cpu_load},
+#     'max_ram': {max_ram_usage}
+#     }}
+# }}
+# """)
