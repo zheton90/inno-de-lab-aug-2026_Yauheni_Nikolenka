@@ -6,7 +6,7 @@ def calculate_overdue_fine(name: any, days_overdue: any, fine_rate: any) -> tupl
        for invalid arguments.
 
        Args:
-           name (str | any): name of the movie
+           name (any): name of the movie
            days_overdue (any): how many days overdue
            fine_rate (any): fine rate for day_overdue
 
@@ -30,7 +30,7 @@ def calculate_overdue_fine(name: any, days_overdue: any, fine_rate: any) -> tupl
     finally:
         print('--- Return transaction validation completed ---')
 
-name, index, total_fine = calculate_overdue_fine('Interstellar', 2, 3.0)
+name, index, total_fine = calculate_overdue_fine('Interstellar', [3,], 3.0)
 
 if name:
     print(f'Movie: {name} | Total Fine: {total_fine} | Fine Rate: {index}')
