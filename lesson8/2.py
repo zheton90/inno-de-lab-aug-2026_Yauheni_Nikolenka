@@ -47,8 +47,8 @@ sorted_report1 = get_sorted_report(
 
 print('Top Categories by Revenue')
 
-for item in sorted_report1:
-    print(f"{item['category']}: {item['total_sales']}")
+for index, item in enumerate(sorted_report1, start=1):
+    print(f"{index}. {item['category']}: {item['total_sales']}")
 
 sorted_report2 = get_sorted_report(
 [
@@ -60,8 +60,8 @@ sorted_report2 = get_sorted_report(
 
 print('Top Categories by Revenue')
 
-for item in sorted_report2:
-    print(f"{item['category']}: {item['total_sales']}")
+for index, item in enumerate(sorted_report2, start=1):
+    print(f"{index}. {item['category']}: {item['total_sales']}")
 
 sorted_report3 = get_sorted_report(
 [
@@ -73,6 +73,6 @@ sorted_report3 = get_sorted_report(
 
 print('Top Categories by Revenue')
 
-for item in sorted_report3:
-    print(f"{item['category']}: {item['total_sales']}")
+for index, item in enumerate(sorted_report3, start=1):
+    print(f"{index}. {item['category']}: {item['total_sales']}")
 

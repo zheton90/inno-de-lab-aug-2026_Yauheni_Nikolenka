@@ -11,7 +11,7 @@ def calculate_rental_batch (quantity: int, rental_rate: float, discount: float= 
     Returns:
         tuple[float,bool]: sum of batch and result of limit exceedance
     """
-    final_sum = quantity * rental_rate * (1 - discount)
+    final_sum = round(quantity * rental_rate * (1 - discount), 2)
     is_limit_exeeded = final_sum > MAX_RENTAL_BATCH_LIMIT
     return final_sum, is_limit_exeeded
 
