@@ -1,77 +1,4 @@
-# copied the first exercise
-
-class Trainee:
-    def __init__(self, name: str, surname: str, score: int = 0, passing_grade: int = 10):
-        self.name = name
-        self.surname = surname
-        self.__score = score
-        self.passing_grade = passing_grade
-
-    @property
-    def score(self):
-        return self.__score
-
-    @score.setter
-    def score(self, value: int):
-        if type(value) != int:
-            raise ValueError(f"Expected value of type int, got {type(value)}")
-        elif value < 0:
-            raise ValueError(f"The score shouldn't be less than 0!")
-        else:
-            self.__score = value
-
-    def do_homework(self) -> None:
-        """
-        This function increases score by 1
-
-        Returns:
-            None
-        """
-
-        self.score += 1
-
-    def miss_homework(self) -> None:
-        """
-        This function decreases score by 1
-
-        Returns:
-            None
-        """
-
-        self.score -= 1
-
-    def visit_lecture(self) -> None:
-        """
-        This function increases score by 1
-
-        Returns:
-            None
-        """
-
-        self.score += 1
-
-    def miss_lecture(self) -> None:
-        """
-        This function decreases score by 1
-
-        Returns:
-            None
-        """
-
-        self.score -= 1
-
-    def is_passing(self) -> bool:
-        """
-        This function checks status finishing of course
-
-        Returns:
-            bool: true is passing else false
-        """
-
-        if self.score >= self.passing_grade:
-            return True
-        else:
-            return False
+from first_challenge import Trainee
 
 class HardworkingTrainee(Trainee):
 
@@ -91,9 +18,9 @@ class AuditTrainee(Trainee):
         return True
 
 class Cohort:
-    def __init__(self, title: str = "Python Core 2026", trainees: list[Trainee] = []):
+    def __init__(self, title: str = "Python Core 2026", trainees: list[Trainee] | None = None):
         self.title = title
-        self.trainees = trainees
+        self.trainees = trainees if trainees is not None else []
 
     def add_trainee(self, trainee: Trainee) -> None:
         """

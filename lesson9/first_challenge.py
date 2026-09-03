@@ -6,7 +6,7 @@ class Trainee:
         self.passing_grade = passing_grade
 
     @property
-    def score(self):
+    def score(self) -> int:
         return self.__score
 
     @score.setter
@@ -73,6 +73,10 @@ class Trainee:
 
 # 1. Создание стажера с начальным баллом 9 и проходным баллом 10
 trainee = Trainee(name="Иван", surname="Иванов", score=9, passing_grade=10)
+
+title = "=== ПРОВЕРКА УСПЕВАЕМОСТИ СТАЖЕРА ==="
+
+print(f'{title}')
 
 # 2. Выполнение домашнего задания и проверка статуса
 trainee.do_homework()
